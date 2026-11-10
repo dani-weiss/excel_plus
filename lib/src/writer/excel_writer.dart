@@ -28,6 +28,7 @@ class ExcelWriter extends _WriterBase
     _setSheetElements();
     _applySheetVisibilities();
     _applySheetOrder();
+    _applyActiveSheet();
     _applyDefinedNames();
     _applyWorkbookProtection();
     if (_excel._defaultSheet != null) {
@@ -104,7 +105,6 @@ class ExcelWriter extends _WriterBase
   }
 
   List<int>? _save() => ZipEncoder().encode(_buildArchive());
-
 
   void _setColumns(Sheet sheetObject, XmlDocument xmlFile) {
     final autoFits = sheetObject.getColumnAutoFits;
@@ -275,6 +275,42 @@ class ExcelWriter extends _WriterBase
     String? expectedSheet = _excel._getDefaultSheet();
 
     return expectedSheet == sheetName;
+  }
+
+  /// Selects the worksheet set with [Excel.setActiveSheet]: `activeTab` of the
+  /// workbook view. `tabSelected` is set with the sheet view of each worksheet.
+  void _applyActiveSheet() {
+    final active = _excel._activeSheet;
+    final wb = _excel._xmlFiles['xl/workbook.xml']
+        ?.findAllElements('workbook')
+        .firstOrNull;
+    if (active == null || wb == null) return;
+
+    final names = [
+      for (final sheet in wb.findAllElements('sheet'))
+        sheet.getAttribute('name'),
+    ];
+    final index = names.indexOf(active);
+    if (index < 0) return;
+
+    var bookViews = wb.findElements('bookViews').firstOrNull;
+    if (bookViews == null) {
+      // <bookViews> sits right before <sheets>
+      final sheetsAt = wb.children.indexWhere(
+        (n) => n is XmlElement && n.name.local == 'sheets',
+      );
+      bookViews = XmlElement(_xmlName('bookViews'));
+      wb.children.insert(
+        sheetsAt < 0 ? wb.children.length : sheetsAt,
+        bookViews,
+      );
+    }
+    var view = bookViews.findElements('workbookView').firstOrNull;
+    if (view == null) {
+      view = XmlElement(_xmlName('workbookView'));
+      bookViews.children.add(view);
+    }
+    view.setAttribute('activeTab', '$index');
   }
 
   /// Reorders the workbook `<sheets>` entries to match the in-memory sheet order

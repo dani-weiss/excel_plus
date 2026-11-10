@@ -105,6 +105,14 @@ mixin _WriterWorksheetFeaturesMixin on _WriterBase {
       sheet._showRowColHeaders ? null : '0',
     );
     _setOrRemoveAttr(view, 'zoomScale', sheet._zoomScale?.toString());
+    // Only the worksheet chosen with Excel.setActiveSheet is selected
+    if (_excel._activeSheet != null) {
+      _setOrRemoveAttr(
+        view,
+        'tabSelected',
+        _excel._activeSheet == sheetName ? '1' : null,
+      );
+    }
 
     // Regenerate the pane (frozen or split); any prior pane/selection is
     // replaced. A worksheet has a single pane, so the two are exclusive.

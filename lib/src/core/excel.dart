@@ -155,6 +155,9 @@ class Excel {
 
   String? _defaultSheet;
 
+  /// The worksheet that is selected when the file is opened, see [setActiveSheet]
+  String? _activeSheet;
+
   /// The internal parser that decoded this workbook. Exposed for advanced use;
   /// not part of the supported public surface and may change between releases.
   late Parser parser;
@@ -542,6 +545,9 @@ class Excel {
       if (_defaultSheet == oldSheetName) {
         _defaultSheet = newSheetName;
       }
+      if (_activeSheet == oldSheetName) {
+        _activeSheet = newSheetName;
+      }
 
       copy(oldSheetName, newSheetName);
 
@@ -866,6 +872,17 @@ class Excel {
       }
     }
     return null;
+  }
+
+  /// Selects [sheetName] when the file is opened, without changing the order of
+  /// the worksheets. Unlike [setDefaultSheet], which moves the sheet to the front.
+  /// Returns `true` on success.
+  bool setActiveSheet(String sheetName) {
+    if (_sheetMap[sheetName] == null) {
+      return false;
+    }
+    _activeSheet = sheetName;
+    return true;
   }
 
   /// Sets [sheetName] as the default opening sheet. Returns `true` on success.
