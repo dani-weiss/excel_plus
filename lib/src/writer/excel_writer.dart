@@ -105,11 +105,6 @@ class ExcelWriter extends _WriterBase
 
   List<int>? _save() => ZipEncoder().encode(_buildArchive());
 
-  /// Encodes the workbook and forwards each output chunk to [onBytes] as the zip
-  /// is produced, so the whole `.xlsx` is never buffered in memory.
-  void _saveToStream(void Function(List<int> bytes) onBytes) {
-    ZipEncoder().encodeStream(_buildArchive(), _SinkOutputStream(onBytes));
-  }
 
   void _setColumns(Sheet sheetObject, XmlDocument xmlFile) {
     final autoFits = sheetObject.getColumnAutoFits;

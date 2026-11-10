@@ -81,7 +81,7 @@ String _stripElementPrefix(XmlDocument document, String prefix) {
   final reparsed = XmlDocument.parse(serialised);
   final root = reparsed.rootElement;
   if (!root.attributes.any((a) => a.name.qualified == 'xmlns')) {
-    root.attributes.add(XmlAttribute(XmlName.parts('xmlns'), _spreadsheetMlNs));
+    root.attributes.add(XmlAttribute(XmlName('xmlns'), _spreadsheetMlNs));
   }
   return reparsed.toXmlString();
 }

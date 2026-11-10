@@ -266,13 +266,13 @@ mixin _ParserWorksheetFeaturesMixin on _ParserBase {
     // x14/xm elements are prefixed, so match by local name in any namespace.
     for (final group in doc.findAllElements(
       'sparklineGroup',
-      namespaceUri: '*',
+      namespace: '*',
     )) {
       final sparklines = <Sparkline>[];
-      for (final s in group.findAllElements('sparkline', namespaceUri: '*')) {
-        final f = s.findElements('f', namespaceUri: '*').firstOrNull?.innerText;
+      for (final s in group.findAllElements('sparkline', namespace: '*')) {
+        final f = s.findElements('f', namespace: '*').firstOrNull?.innerText;
         final sqref = s
-            .findElements('sqref', namespaceUri: '*')
+            .findElements('sqref', namespace: '*')
             .firstOrNull
             ?.innerText;
         if (f != null && sqref != null && f.isNotEmpty && sqref.isNotEmpty) {
@@ -282,7 +282,7 @@ mixin _ParserWorksheetFeaturesMixin on _ParserBase {
       if (sparklines.isEmpty) continue;
 
       ExcelColor? colorOf(String local) {
-        final el = group.findElements(local, namespaceUri: '*').firstOrNull;
+        final el = group.findElements(local, namespace: '*').firstOrNull;
         if (el == null) return null;
         final hex = _readColorHex(el);
         return hex == null ? null : ExcelColor.fromHexString(hex);

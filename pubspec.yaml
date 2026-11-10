@@ -19,11 +19,11 @@ screenshots:
     path: images/preview.png
 
 environment:
-  sdk: ^3.11.4
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  archive: ^4.5.1
-  xml: ^7.0.1
+  archive: ^3.6.1
+  xml: ^6.5.0
   web: ^1.1.1
   csv_plus: ^1.2.0
 

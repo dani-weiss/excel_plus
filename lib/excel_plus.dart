@@ -57,10 +57,6 @@ import 'src/platform/isolate_io.dart'
     if (dart.library.js_interop) 'src/platform/isolate_stub.dart'
     as iso;
 
-/// Re-exported from `archive` so [Excel.decodeBuffer] can be called, and its
-/// [InputStream] argument built via [InputFileStream] to stream a large `.xlsx`
-/// from disk, without taking a separate `archive` dependency.
-export 'package:archive/archive.dart' show InputStream, InputFileStream;
 
 /// Re-exported from `csv_plus` so the CSV bridge ([Excel.fromCsv],
 /// [ExcelCsv.importCsv], [SheetCsv.toCsv]) can be configured, its columns typed
@@ -157,7 +153,6 @@ part 'src/writer/writer_pivot.dart';
 part 'src/writer/writer_worksheet_features.dart';
 part 'src/writer/writer_conditional_format.dart';
 part 'src/writer/excel_writer.dart';
-part 'src/writer/sink_output_stream.dart';
 part 'src/writer/span_corrector.dart';
 
 /// Formula
@@ -198,4 +193,4 @@ part 'src/utils/fast_list.dart';
 part 'src/utils/worksheet_order.dart';
 
 XmlName _xmlName(String local, [String? prefix]) =>
-    XmlName.parts(local, prefix: prefix);
+    XmlName(local, prefix);

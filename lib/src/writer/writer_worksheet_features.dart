@@ -320,7 +320,7 @@ mixin _WriterWorksheetFeaturesMixin on _WriterBase {
       // name in any namespace, a qualified `findElements('sparklineGroups')`
       // misses it and would append a second (schema-invalid) container.
       var existing = ext
-          .findElements('sparklineGroups', namespaceUri: '*')
+          .findElements('sparklineGroups', namespace: '*')
           .firstOrNull;
       if (existing == null) {
         existing = XmlElement(_x14('sparklineGroups'), [
